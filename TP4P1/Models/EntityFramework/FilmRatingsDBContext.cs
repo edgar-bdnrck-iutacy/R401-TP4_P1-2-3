@@ -5,12 +5,25 @@ namespace TP4P1.Models.EntityFramework
 {
     public class FilmRatingsDBContext : DbContext
     {
+        public FilmRatingsDBContext()
+        {
+        }
+
         public FilmRatingsDBContext(DbContextOptions<FilmRatingsDBContext> options)
             : base(options) { }
 
         public DbSet<Film> Films { get; set; } = null!;
         public DbSet<Utilisateur> Utilisateurs { get; set; } = null!;
         public DbSet<Notation> Notations { get; set; } = null!;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                // Connexion "en dur" pour les migrations (ordre du TP : pas de appsettings ici)
+                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=filmrating;Username=postgres;Password=postgres");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
