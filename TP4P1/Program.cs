@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using TP4P1.Models.EntityFramework;
 
 namespace TP4P1
 {
@@ -6,6 +8,10 @@ namespace TP4P1
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<FilmRatingsDBContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("FilmRatingsDb")));
+
 
             // Add services to the container.
 

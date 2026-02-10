@@ -17,11 +17,14 @@ namespace TP4P1.Models.EntityFramework
         [Column("utl_prenom", TypeName = "varchar(50)")]
         public string? Prenom { get; set; }
 
+        [RegularExpression(@"^0[0-9]{9}$", ErrorMessage = "Le n° de mobile doit contenir 10 chiffres et commencer par 0.")]
         [Column("utl_mobile", TypeName = "char(10)")]
         public string? Mobile { get; set; }
 
         [Required]
         [Column("utl_mail", TypeName = "varchar(100)")]
+        [EmailAddress(ErrorMessage = "Le mail doit être une adresse valide.")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "La longueur d’un email doit être comprise entre 6 et 100 caractères.")]
         public string Mail { get; set; } = null!;
 
         [Required]

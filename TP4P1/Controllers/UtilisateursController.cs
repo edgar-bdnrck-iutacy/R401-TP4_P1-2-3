@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TP4P1.Models.EntityFramework;
+using Microsoft.AspNetCore.Http;
 
 namespace TP4P1.Controllers
 {
@@ -29,7 +30,7 @@ namespace TP4P1.Controllers
 
         // GET: api/Utilisateurs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Utilisateur>> GetUtilisateur(int id)
+        public async Task<ActionResult<Utilisateur>> GetUtilisateurById(int id)
         {
             var utilisateur = await _context.Utilisateurs.FindAsync(id);
 
@@ -37,6 +38,22 @@ namespace TP4P1.Controllers
             {
                 return NotFound();
             }
+
+            return utilisateur;
+        }
+
+        [HttpGet("by-email/{email}")]
+        public async Task<ActionResult<Utilisateur>> GetUtilisateurByEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return BadRequest("Email vide.");
+
+            // Recherche insensible à la casse
+            var utilisateur = await _context.Utilisateurs
+                .FirstOrDefaultAsync(u => u.Mail.ToUpper() == email.ToUpper());
+
+            if (utilisateur == null)
+                return NotFound();
 
             return utilisateur;
         }
@@ -73,15 +90,26 @@ namespace TP4P1.Controllers
         }
 
         // POST: api/Utilisateurs
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Utilisateur>> PostUtilisateur(Utilisateur utilisateur)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             _context.Utilisateurs.Add(utilisateur);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUtilisateur", new { id = utilisateur.UtilisateurId }, utilisateur);
+            return CreatedAtAction(
+                "GetUtilisateurById",
+                new { id = utilisateur.UtilisateurId },
+                utilisateur
+            );
         }
+
 
         // DELETE: api/Utilisateurs/5
         [HttpDelete("{id}")]

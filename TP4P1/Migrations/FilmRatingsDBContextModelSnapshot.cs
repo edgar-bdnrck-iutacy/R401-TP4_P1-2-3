@@ -18,7 +18,7 @@ namespace TP4P1.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("public")
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "8.0.23")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -112,6 +112,7 @@ namespace TP4P1.Migrations
 
                     b.Property<string>("Mail")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("utl_mail");
 
