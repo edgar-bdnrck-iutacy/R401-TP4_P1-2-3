@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TP4P1.Models.EntityFramework
 {
     [Table("t_e_utilisateur_utl")]
-    public class Utilisateur
+    public partial class Utilisateur
     {
         [Key]
         [Column("utl_id")]
